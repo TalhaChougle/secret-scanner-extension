@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:420px;min-height:500px;max-height:600px;background:#0f1117;color:#e2e8f0;font-family:'Inter',sans-serif;display:flex;flex-direction:column;overflow:hidden}
+
+/* Header */
+.header{background:#161b27;border-bottom:1px solid #2a3350;padding:12px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.logo{width:32px;height:32px;background:linear-gradient(135deg,#4dd9e0,#3b9fa5);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#0f1117;font-size:15px;flex-shrink:0}
+.hname{font-size:13px;font-weight:700}
+.hsub{font-size:9px;color:#4a5a7a;letter-spacing:.5px}
+.hdot{width:8px;height:8px;border-radius:50%;margin-left:auto;flex-shrink:0}
+.dot-on{background:#4ade80;box-shadow:0 0 8px #4ade8088;animation:pulse 2s infinite}
+.dot-off{background:#f87171}
+.dot-check{background:#fbbf24;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Nav tabs */
+.nav{display:flex;background:#161b27;border-bottom:1px solid #2a3350;flex-shrink:0}
+.ntab{flex:1;padding:9px 4px;font-size:10px;font-weight:700;color:#4a5a7a;cursor:pointer;text-align:center;border-bottom:2px solid transparent;letter-spacing:.5px;text-transform:uppercase;transition:all .15s}
+.ntab:hover{color:#e2e8f0}
+.ntab.active{color:#4dd9e0;border-bottom-color:#4dd9e0}
+.ntab-badge{display:inline-block;background:rgba(248,113,113,.2);color:#f87171;border-radius:8px;padding:1px 5px;font-size:9px;margin-left:3px}
+
+/* Pages */
+.pages{flex:1;overflow:hidden;position:relative}
+.page{position:absolute;top:0;left:0;right:0;bottom:0;overflow-y:auto;padding:12px;display:none}
+.page.active{display:block}
+.page::-webkit-scrollbar{width:4px}
+.page::-webkit-scrollbar-thumb{background:#2a3350;border-radius:2px}
+
+/* Scan page */
+.repo-card{background:#161b27;border:1px solid #2a3350;border-radius:10px;padding:12px;margin-bottom:10px}
+.rl{font-size:9px;color:#4a5a7a;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;font-weight:600}
+.repo-name{font-family:'JetBrains Mono',monospace;font-size:12px;color:#4dd9e0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;margin-top:6px;letter-spacing:.5px}
+.b-clean{background:rgba(74,222,128,.12);color:#4ade80;border:1px solid rgba(74,222,128,.3)}
+.b-found{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.3)}
+.b-idle{background:rgba(74,90,122,.12);color:#4a5a7a;border:1px solid rgba(74,90,122,.3)}
+.b-scanning{background:rgba(99,102,241,.12);color:#a5b4fc;border:1px solid rgba(99,102,241,.3)}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px}
+.stat{background:#161b27;border:1px solid #2a3350;border-radius:8px;padding:9px 6px;text-align:center}
+.sn{font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace;line-height:1}
+.sl{font-size:8px;color:#4a5a7a;text-transform:uppercase;letter-spacing:.8px;margin-top:3px}
+.nc{color:#f87171}.nh{color:#fbbf24}.nm{color:#a5b4fc}.nco{color:#4dd9e0}
+
+.scan-btn{width:100%;padding:11px;background:linear-gradient(135deg,#4dd9e0,#3b9fa5);color:#0f1117;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px;transition:opacity .2s}
+.scan-btn:hover{opacity:.9}
+.scan-btn:disabled{opacity:.4;cursor:not-allowed}
+.stop-btn{width:100%;padding:9px;background:transparent;border:1px solid rgba(248,113,113,.3);color:#f87171;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:none;margin-bottom:8px}
+
+.prog{display:none;margin-bottom:8px}
+.prog-bar{height:4px;background:#1c2333;border-radius:2px;overflow:hidden;margin-bottom:5px}
+.prog-fill{height:100%;width:0%;background:linear-gradient(90deg,#4dd9e0,#a371f7,#4dd9e0);background-size:200% 100%;border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.prog-fill.scanning{animation:flowbar 1.8s ease-in-out infinite}
+.prog-fill.draining{transition:width 1.8s cubic-bezier(.4,0,.2,1) !important;animation:none}
+@keyframes flowbar{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.prog-text{font-size:10px;color:#4a5a7a;font-family:'JetBrains Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.findings-list{display:flex;flex-direction:column;gap:6px}
+.fcard{background:#161b27;border:1px solid #2a3350;border-radius:8px;overflow:hidden}
+.fcard-head{display:flex;align-items:center;gap:7px;padding:9px 11px;cursor:pointer}
+.fcard-head:hover{background:rgba(77,217,224,.02)}
+.fbadge{padding:2px 7px;border-radius:3px;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;flex-shrink:0}
+.fb-critical{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.25)}
+.fb-high{background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.25)}
+.fb-medium{background:rgba(99,102,241,.12);color:#a5b4fc;border:1px solid rgba(99,102,241,.25)}
+.fb-low{background:rgba(74,222,128,.1);color:#4ade80;border:1px solid rgba(74,222,128,.2)}
+.finfo{flex:1;min-width:0}
+.ftype{font-size:11px;font-weight:600;color:#e2e8f0}
+.ffile{font-size:9px;color:#4a5a7a;font-family:'JetBrains Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fchev{color:#4a5a7a;font-size:12px;transition:transform .2s;flex-shrink:0}
+.fcard.open .fchev{transform:rotate(90deg)}
+.fcard-body{display:none;padding:8px 11px;border-top:1px solid #2a3350;background:#0f1117}
+.fcard.open .fcard-body{display:block}
+.fcode{background:#161b27;border:1px solid #2a3350;border-radius:5px;padding:7px 9px;font-family:'JetBrains Mono',monospace;font-size:10px;overflow-x:auto;white-space:pre;margin-bottom:7px;line-height:1.5;color:#e2e8f0}
+.frow{display:flex;justify-content:space-between;font-size:10px;padding:2px 0;border-bottom:1px solid #1c2333;font-family:'JetBrains Mono',monospace}
+.frow:last-of-type{border:none}
+.frow span:first-child{color:#4a5a7a}
+.frow span:last-child{color:#e2e8f0;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.frem{background:rgba(74,222,128,.05);border-left:3px solid #4ade80;border-radius:0 5px 5px 0;padding:6px 9px;font-size:10px;color:#e2e8f0;line-height:1.6;margin:7px 0}
+.facts{display:flex;gap:5px}
+.fact{background:#1c2333;border:1px solid #2a3350;border-radius:5px;color:#4a5a7a;font-size:10px;padding:4px 8px;cursor:pointer;font-family:inherit;text-decoration:none;transition:all .15s}
+.fact:hover{border-color:#4dd9e0;color:#4dd9e0}
+.empty{text-align:center;padding:28px 16px;color:#4a5a7a;font-size:12px}
+.empty-icon{font-size:36px;margin-bottom:8px}
+.empty-title{font-size:13px;font-weight:600;color:#e2e8f0;margin-bottom:4px}
+
+/* History page */
+.hist-item{background:#161b27;border:1px solid #2a3350;border-radius:8px;padding:10px 12px;margin-bottom:7px;cursor:pointer;transition:border-color .15s}
+.hist-item:hover{border-color:#3d4d6a}
+.hist-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.hist-repo{font-family:'JetBrains Mono',monospace;font-size:11px;color:#4dd9e0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.hist-sev{padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;letter-spacing:.5px;flex-shrink:0;margin-left:8px}
+.hs-clean{background:rgba(74,222,128,.12);color:#4ade80}
+.hs-crit{background:rgba(248,113,113,.12);color:#f87171}
+.hs-high{background:rgba(251,191,36,.12);color:#fbbf24}
+.hs-med{background:rgba(99,102,241,.12);color:#a5b4fc}
+.hist-meta{display:flex;gap:10px;font-size:10px;color:#4a5a7a}
+.hist-meta span{display:flex;align-items:center;gap:3px}
+
+/* Overview stats */
+.ov-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.ov-stat{background:#161b27;border:1px solid #2a3350;border-radius:9px;padding:12px}
+.ov-val{font-size:26px;font-weight:800;font-family:'JetBrains Mono',monospace;line-height:1;margin-bottom:3px}
+.ov-lbl{font-size:9px;color:#4a5a7a;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+
+/* Settings page */
+.field{margin-bottom:10px}
+.field label{display:block;font-size:9px;color:#4a5a7a;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;font-weight:600}
+.field input,.field select{width:100%;background:#161b27;border:1px solid #2a3350;border-radius:7px;color:#e2e8f0;font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 10px;outline:none;transition:border-color .15s}
+.field input:focus,.field select:focus{border-color:#4dd9e0}
+.save-btn{width:100%;padding:10px;background:linear-gradient(135deg,#4dd9e0,#3b9fa5);color:#0f1117;border:none;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit;margin-top:4px}
+.danger-btn{width:100%;padding:9px;background:transparent;border:1px solid rgba(248,113,113,.3);color:#f87171;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:8px}
+
+/* Live indicator */
+.live-bar{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:8px;padding:8px 12px;margin-bottom:10px;display:none}
+.live-bar.active{display:flex;align-items:center;gap:8px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#a5b4fc;animation:pulse .8s infinite;flex-shrink:0}
+.live-text{font-size:11px;color:#a5b4fc;font-family:'JetBrains Mono',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.live-pct{font-size:11px;color:#6366f1;font-weight:700;font-family:'JetBrains Mono',monospace}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo">S</div>
+  <div>
+    <div class="hname">Secret Scanner</div>
+    <div class="hsub">GITHUB SECURITY TOOL</div>
+  </div>
+  <div class="hdot dot-check" id="dot"></div>
+</div>
+
+<!-- Nav -->
+<div class="nav">
+  <div class="ntab active" id="tab-scan">Scan</div>
+  <div class="ntab" id="tab-overview">Overview</div>
+  <div class="ntab" id="tab-history">History</div>
+  <div class="ntab" id="tab-pipeline">Pipeline</div>
+  <div class="ntab" id="tab-settings">Settings</div>
+</div>
+
+<!-- Pages -->
+<div class="pages">
+
+  <!-- SCAN -->
+  <div class="page active" id="page-scan">
+    <div class="repo-card">
+      <div class="rl">Current Repository</div>
+      <div class="repo-name" id="repoName">Not a GitHub repo</div>
+      <div class="badge b-idle" id="repoBadge">IDLE</div>
+    </div>
+
+    <div class="live-bar" id="liveBar">
+      <div class="live-dot"></div>
+      <div class="live-text" id="liveText">Scanning...</div>
+      <div class="live-pct" id="livePct">0%</div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><div class="sn nc" id="nCrit">0</div><div class="sl">Critical</div></div>
+      <div class="stat"><div class="sn nh" id="nHigh">0</div><div class="sl">High</div></div>
+      <div class="stat"><div class="sn nm" id="nMed">0</div><div class="sl">Medium</div></div>
+      <div class="stat"><div class="sn nco" id="nCom">0</div><div class="sl">Commits</div></div>
+    </div>
+
+    <button class="scan-btn" id="scanBtn">⚡ Scan This Repository</button>
+    <button class="stop-btn" id="stopBtn">■ Stop Scan</button>
+
+    <div class="prog" id="prog">
+      <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+      <div class="prog-text" id="progText">Initializing...</div>
+    </div>
+
+    <div class="findings-list" id="findingsList"></div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="page" id="page-overview">
+    <div class="ov-stats">
+      <div class="ov-stat"><div class="ov-val nc" id="ov-crit">0</div><div class="ov-lbl">Critical Secrets</div></div>
+      <div class="ov-stat"><div class="ov-val" style="color:#4dd9e0" id="ov-repos">0</div><div class="ov-lbl">Repos Scanned</div></div>
+      <div class="ov-stat"><div class="ov-val nh" id="ov-total">0</div><div class="ov-lbl">Total Findings</div></div>
+      <div class="ov-stat"><div class="ov-val" style="color:#4ade80" id="ov-clean">0</div><div class="ov-lbl">Clean Repos</div></div>
+    </div>
+    <div style="font-size:10px;color:#4a5a7a;text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:8px">Recent Critical Findings</div>
+    <div id="ov-critical-list"></div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="page" id="page-history">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-size:10px;color:#4a5a7a;text-transform:uppercase;letter-spacing:1px;font-weight:600">Scan History</div>
+      <span id="hist-count" style="font-size:10px;color:#4a5a7a"></span>
+    </div>
+    <div id="historyList"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="page" id="page-settings">
+    <div class="field">
+      <label>GitHub Token</label>
+      <input type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxx"/>
+    </div>
+    <div class="field">
+      <label>Max Commits to Scan</label>
+      <input type="number" id="cfg-max" min="1" max="500" value="50"/>
+    </div>
+    <div class="field">
+      <label>Backend URL</label>
+      <input type="text" id="cfg-api" placeholder="https://...onrender.com"/>
+    </div>
+    <div class="field">
+      <label>Auto-scan on repo visit</label>
+      <select id="cfg-auto">
+        <option value="false">Disabled (manual only)</option>
+        <option value="true">Enabled (scan automatically)</option>
+      </select>
+    </div>
+    <button class="save-btn" id="saveBtn">Save Settings</button>
+    <button class="danger-btn" id="clearBtn">Clear All History</button>
+    <div id="save-msg" style="font-size:11px;color:#4ade80;text-align:center;margin-top:8px;display:none">✓ Settings saved!</div>
+  </div>
+
+  <!-- PIPELINE -->
+  <div class="page" id="page-pipeline">
+    <div style="font-size:9px;color:#4dd9e0;text-transform:uppercase;letter-spacing:2px;font-weight:700;text-align:center;margin-bottom:10px">Scan Agent Pipeline</div>
+    <svg viewBox="0 0 380 480" style="width:100%;height:auto;display:block">
+      <defs>
+        <marker id="a1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path d="M0,0 L0,7 L7,3.5 z" fill="#3a4a6a"/>
+        </marker>
+        <marker id="a2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path d="M0,0 L0,7 L7,3.5 z" fill="#f87171"/>
+        </marker>
+        <marker id="a3" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path d="M0,0 L0,7 L7,3.5 z" fill="#fbbf24"/>
+        </marker>
+        <marker id="a4" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path d="M0,0 L0,7 L7,3.5 z" fill="#4ade80"/>
+        </marker>
+      </defs>
+
+      <!-- ROW 1: Scan Button -->
+      <rect x="115" y="10" width="150" height="42" rx="9" fill="#1a2235" stroke="#4dd9e0" stroke-width="1.5"/>
+      <text x="190" y="27" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#4dd9e0">&#x26A1; SCAN TRIGGERED</text>
+      <text x="190" y="42" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">Button click · popup</text>
+
+      <line x1="190" y1="52" x2="190" y2="72" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
+
+      <!-- ROW 2: Service Worker -->
+      <rect x="115" y="75" width="150" height="42" rx="9" fill="#161e2e" stroke="#3a4a6a" stroke-width="1.5"/>
+      <text x="190" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#c9d1e8">&#x2699;&#xFE0F; SERVICE WORKER</text>
+      <text x="190" y="107" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">Background orchestrator</text>
+
+      <line x1="190" y1="117" x2="190" y2="137" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
+
+      <!-- ROW 3: GitHub API -->
+      <rect x="115" y="140" width="150" height="42" rx="9" fill="#1a1535" stroke="#a371f7" stroke-width="1.5"/>
+      <text x="190" y="157" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#a371f7">&#x1F4E6; GITHUB API</text>
+      <text x="190" y="172" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">Fetch commits · diffs</text>
+
+      <line x1="190" y1="182" x2="190" y2="202" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
+
+      <!-- ROW 4: Render Backend -->
+      <rect x="115" y="205" width="150" height="42" rx="9" fill="#1a1535" stroke="#a371f7" stroke-width="1.5"/>
+      <text x="190" y="222" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#a371f7">&#x1F30D; RENDER BACKEND</text>
+      <text x="190" y="237" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">Stream scan · SSE</text>
+
+      <line x1="190" y1="247" x2="190" y2="267" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
+
+      <!-- ROW 5: Pattern Matcher -->
+      <rect x="115" y="270" width="150" height="42" rx="9" fill="#1f1a10" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="190" y="287" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#fbbf24">&#x1F50D; PATTERN MATCHER</text>
+      <text x="190" y="302" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">API keys · tokens · secrets</text>
+
+      <line x1="190" y1="312" x2="190" y2="332" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
+
+      <!-- ROW 6: Risk Scorer -->
+      <rect x="115" y="335" width="150" height="42" rx="9" fill="#161e2e" stroke="#3a4a6a" stroke-width="1.5"/>
+      <text x="190" y="352" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#c9d1e8">&#x1F4CA; RISK SCORER</text>
+      <text x="190" y="367" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">CRITICAL · HIGH · MEDIUM</text>
+
+      <!-- Branch arrows from Risk Scorer -->
+      <line x1="145" y1="377" x2="65" y2="408" stroke="#f87171" stroke-width="1.5" marker-end="url(#a2)"/>
+      <line x1="190" y1="377" x2="190" y2="408" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#a3)"/>
+      <line x1="235" y1="377" x2="315" y2="408" stroke="#4ade80" stroke-width="1.5" marker-end="url(#a4)"/>
+
+      <!-- ROW 7: Outcomes -->
+      <rect x="10" y="410" width="110" height="42" rx="9" fill="#1f1015" stroke="#f87171" stroke-width="1.5"/>
+      <text x="65" y="427" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="#f87171">SECRETS FOUND</text>
+      <text x="65" y="442" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">Alert + badge</text>
+
+      <rect x="135" y="410" width="110" height="42" rx="9" fill="#1f1a10" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="190" y="427" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="#fbbf24">SAVE HISTORY</text>
+      <text x="190" y="442" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">chrome.storage</text>
+
+      <rect x="260" y="410" width="110" height="42" rx="9" fill="#101f15" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="315" y="427" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="#4ade80">CLEAN</text>
+      <text x="315" y="442" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">No secrets found</text>
+    </svg>
+  </div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>
