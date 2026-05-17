@@ -1,135 +1,174 @@
-# 🔍 Secret Scanner — GitHub Security Extension
+# 🔍 GitHub Secret Scanner
 
-A Chrome extension that scans GitHub repositories for exposed secrets, API keys, tokens, and passwords — right from your browser.
+> A browser extension that automatically scans GitHub repositories for leaked API keys, passwords, and credentials buried in commit history.
 
-Built as a portfolio project by [Talha Chougle](https://github.com/TalhaChougle), an aspiring penetration tester.
-
----
-
-## What it does
-
-Ever pushed code and wondered *"did I accidentally leave an API key in there?"* — Secret Scanner answers that question in seconds.
-
-It scans through a repo's commit history, runs pattern matching against 14+ secret detection rules, and tells you exactly what was found and where.
-
-No setup. No CLI. Just install and scan.
+![Version](https://img.shields.io/badge/version-2.0.0-4dd9e0?style=flat-square)
+![Manifest](https://img.shields.io/badge/manifest-v3-a371f7?style=flat-square)
+![Browser](https://img.shields.io/badge/Browser-Extension-f87171?style=flat-square)
 
 ---
 
-## Features
+## 🚀 Quick Install (30 Seconds!)
 
-- **One-click scanning** — floating button appears on any GitHub repo page
-- **Live commit-by-commit progress** — watch it scan each commit in real time
-- **Finds the serious stuff** — API keys, AWS credentials, GitHub tokens, private keys, passwords, and more
-- **Risk scoring** — findings rated CRITICAL, HIGH, or MEDIUM
-- **Scan history** — every scan saved locally so you can revisit results
-- **Pipeline view** — see exactly how the scan agent works under the hood
-- **Clean popup UI** — all tabs accessible from the extension icon
+### For Judges & Reviewers ⚡
 
----
+📦 **[Download Extension Here](https://github.com/TalhaChougle/secret-scanner-extension/releases/latest/download/secret-scanner-extension.zip)**
 
-## Installation
+**Installation Steps:**
 
-Secret Scanner isn't on the Chrome Web Store yet. Install it manually in under a minute:
+1. Download `secret-scanner-extension.zip` from the link above
+2. **Extract the ZIP file** to a folder on your computer
+3. Open your browser and go to `chrome://extensions/`
+4. Enable **"Developer mode"** (toggle in top-right corner)
+5. Click **"Load unpacked"** button
+6. Select the `secret-scanner-fixed` folder (from the extracted files)
+7. Done! 🎉
 
-1. Download this repo as a ZIP → click the green **Code** button → **Download ZIP**
-2. Extract the ZIP on your computer
-3. Open Chrome and go to `chrome://extensions`
-4. Enable **Developer mode** (toggle in the top right)
-5. Click **Load unpacked**
-6. Select the extracted folder
-7. The Secret Scanner icon will appear in your toolbar
+**Total time: 30 seconds** ⏱️
+
+> No server setup. No npm install. No terminal commands. Just install and use!
 
 ---
 
-## Setup
+## 🧠 What It Does
 
-After installing, you need a free GitHub token so the scanner can read repository data without hitting rate limits.
+GitHub Secret Scanner watches your back while you browse GitHub. The moment you open any repository, it injects a **"Scan for Secrets"** button directly onto the page. One click triggers a full pipeline scan across the repo's commit history — surfacing leaked credentials before attackers find them first.
 
-**Getting your token:**
-1. Go to [github.com/settings/tokens](https://github.com/settings/tokens)
-2. Click **Generate new token (classic)**
-3. Give it any name (e.g. `secret-scanner`)
-4. Set expiration to **No expiration**
-5. Check only **`public_repo`** under the repo section
-6. Click **Generate token** and copy it immediately
-
-**Adding it to the extension:**
-1. Click the Secret Scanner icon in your toolbar
-2. Go to the **Settings** tab
-3. Paste your token into the GitHub Token field
-4. Click **Save Settings**
-
-That's it. You only do this once.
+### Detects
+- 🔑 API Keys (OpenAI, AWS, Stripe, Google, etc.)
+- 🔐 Passwords & tokens hardcoded in source
+- 🪪 OAuth secrets & private keys
+- 📄 `.env` file leaks in commit diffs
 
 ---
 
-## How to use
+## ✨ Features
 
-1. Navigate to any public GitHub repository
-2. Click the **Scan for Secrets** button that appears at the bottom right of the page
-3. The extension popup opens and starts scanning
-4. Watch it go through each commit live
-5. Results show up under CRITICAL / HIGH / MEDIUM counters
-6. Full findings are listed below with file paths and matched patterns
-7. Check the **History** tab to revisit past scans
-8. Check the **Pipeline** tab to see how the scan agent works
-
----
-
-## How it works
-Scan Triggered
-↓
-Service Worker (background orchestrator)
-↓
-GitHub API (fetches commit history)
-↓
-Render Backend (streams scan via SSE)
-↓
-Pattern Matcher (14+ regex rules)
-↓
-Risk Scorer (CRITICAL · HIGH · MEDIUM)
-↓
-Results saved to chrome.storage
-
-The backend runs on Render — no setup needed on your end. The extension connects to it automatically.
+| Feature | Description |
+|---|---|
+| **One-click scan** | Floating "Scan for Secrets" button injected on every GitHub repo page |
+| **Live commit animation** | Watch each commit being scanned in real time |
+| **Risk scoring** | Findings rated `CRITICAL` / `HIGH` / `MEDIUM` |
+| **Scan history** | Last 100 scans stored locally via browser storage |
+| **Desktop notifications** | Instant alert when secrets are found |
+| **Badge counter** | Extension icon shows live finding count during scan |
+| **Full dashboard** | Detailed scan history with filtering and export |
+| **Configurable** | Custom GitHub token, API endpoint, max commits |
+| **Stop anytime** | Cancel a running scan mid-way |
 
 ---
 
-## Tech stack
+## 🔄 How It Works — Scan Agent Pipeline
 
-- **Frontend** — Vanilla JS, HTML/CSS (Chrome Extension MV3)
-- **Backend** — Python / FastAPI hosted on Render
-- **APIs** — GitHub REST API, SSE streaming
-- **Storage** — chrome.storage.local
+```
+⚡ SCAN TRIGGERED  (button click on GitHub page)
+        │
+        ▼
+⚙️  SERVICE WORKER  (background.js orchestrates everything)
+        │
+        ▼
+📦 GITHUB API      (fetch commit list & diffs)
+        │
+        ▼
+🌍 RENDER BACKEND  (stream scan results via SSE)
+        │
+        ▼
+🔍 PATTERN MATCHER (regex across API keys · tokens · secrets)
+        │
+        ▼
+📊 RISK SCORER     (CRITICAL · HIGH · MEDIUM classification)
+       /│\
+      / │ \
+     ▼  ▼  ▼
+🚨      💾      ✅
+SECRETS  SAVE   CLEAN
+FOUND   HISTORY
+```
 
----
-
-## Screenshots
-
-<img width="527" height="617" alt="image" src="https://github.com/user-attachments/assets/d3d34fec-ec16-4172-836c-1167a79d6b8f" />
-
-<img width="522" height="587" alt="image" src="https://github.com/user-attachments/assets/3d9c94f5-75b4-43cb-ad38-fcbe38982191" />
-
-<img width="522" height="616" alt="image" src="https://github.com/user-attachments/assets/5b8bcd5d-168e-4bab-9958-0fcfb30847d9" />
-
-
-
----
-
-## Disclaimer
-
-This tool is built for **ethical security research and educational purposes only**. Only scan repositories you own or have explicit permission to test. The developer is not responsible for any misuse.
-
----
-
-## Author
-
-**Talha Chougle**
-Aspiring Penetration Tester · CTF Player · Security Researcher
-
-[GitHub](https://github.com/TalhaChougle)
+The backend runs on [Render](https://render.com) and streams results back via **Server-Sent Events (SSE)** so findings appear in real time as each commit is processed.
 
 ---
 
-*Built with curiosity and too many late nights.*
+## 🗂️ Project Structure
+
+```
+secret-scanner-fixed/
+├── manifest.json       # Browser extension manifest (v3)
+├── popup.html          # Extension popup UI (tabs: Scan, Pipeline, History, Settings)
+├── popup.js            # Popup logic — scan triggers, live updates, history render
+├── background.js       # Service worker — orchestrates scan, SSE stream, badge
+├── content.js          # Injected into GitHub pages — adds "Scan for Secrets" button
+├── dashboard.html      # Full-screen scan history dashboard
+└── icons/
+    ├── icon16.png
+    ├── icon48.png
+    └── icon128.png
+```
+
+---
+
+## ⚙️ Configuration
+
+Open the extension popup → **Settings** tab:
+
+| Setting | Default | Description |
+|---|---|---|
+| GitHub Token | _(empty)_ | Personal access token for private repos & higher rate limits |
+| API Endpoint | `https://github-secret-scanner-api.onrender.com` | Backend URL |
+| Max Commits | `50` | How many commits to scan per run |
+
+> Without a token, GitHub API allows ~60 requests/hour. With a token: 5,000/hour.
+
+---
+
+## 🛠️ Backend
+
+The scan backend is a separate service hosted on Render:
+
+- **Endpoint:** `https://github-secret-scanner-api.onrender.com`
+- **Health check:** `GET /health`
+- **Scan:** `GET /api/scan?repo=owner/repo&max_commits=50&deep=true`
+- **Protocol:** Server-Sent Events (SSE) — streams `finding` and `done` events
+
+> ⚠️ The Render free tier spins down after inactivity. The extension automatically wakes it up before scanning (adds ~10s on cold start).
+
+---
+
+## 🔒 Permissions
+
+| Permission | Reason |
+|---|---|
+| `activeTab` | Read current GitHub tab URL to extract repo name |
+| `storage` | Save scan history and settings locally |
+| `notifications` | Alert when secrets are found |
+| `tabs` | Open dashboard in a new tab |
+| `https://github.com/*` | Inject scan button on GitHub pages |
+| `https://github-secret-scanner-api.onrender.com/*` | Talk to the scan backend |
+
+---
+
+## 🧪 Testing It Out
+
+1. Install the extension (see Quick Install above)
+2. Navigate to any public GitHub repository
+3. Look for the **"🔍 Scan for Secrets"** button in the bottom-right corner
+4. Click it — the popup opens and the scan begins automatically
+5. Watch commits animate in real time
+6. Check the **Pipeline** tab to see the full agent flow
+7. Check the **History** tab for past scans
+
+**Good repos to test on** (known to have had leaked secrets in history):
+- Any large open-source project with long commit history
+- Your own repos (great for personal hygiene checks)
+
+---
+
+## 📋 Permissions Justification
+
+This extension requests only the minimum permissions needed. No data is sent to third parties except the scan backend (`onrender.com`). Scan results and history are stored **locally only** via browser storage. No analytics, no tracking, no external logging.
+
+---
+
+## 📄 License
+
+MIT — free to use, modify, and distribute.
