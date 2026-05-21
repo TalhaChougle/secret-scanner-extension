@@ -229,81 +229,60 @@ body{width:420px;min-height:500px;max-height:600px;background:#0f1117;color:#e2e
   </div>
 
   <!-- PIPELINE -->
-  <div class="page" id="page-pipeline">
-    <div style="font-size:9px;color:#4dd9e0;text-transform:uppercase;letter-spacing:2px;font-weight:700;text-align:center;margin-bottom:10px">Scan Agent Pipeline</div>
-    <svg viewBox="0 0 380 480" style="width:100%;height:auto;display:block">
+  <div class="page" id="page-pipeline" style="padding:6px 10px">
+    <div style="font-size:8px;color:#4dd9e0;text-transform:uppercase;letter-spacing:2px;font-weight:700;text-align:center;margin-bottom:4px">Scan Agent Pipeline</div>
+    <svg viewBox="0 0 320 370" style="width:100%;height:auto;display:block">
       <defs>
-        <marker id="a1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-          <path d="M0,0 L0,7 L7,3.5 z" fill="#3a4a6a"/>
-        </marker>
-        <marker id="a2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-          <path d="M0,0 L0,7 L7,3.5 z" fill="#f87171"/>
-        </marker>
-        <marker id="a3" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-          <path d="M0,0 L0,7 L7,3.5 z" fill="#fbbf24"/>
-        </marker>
-        <marker id="a4" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-          <path d="M0,0 L0,7 L7,3.5 z" fill="#4ade80"/>
-        </marker>
+        <marker id="a1" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#3a4a6a"/></marker>
+        <marker id="a2" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#f87171"/></marker>
+        <marker id="a3" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#fbbf24"/></marker>
+        <marker id="a4" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#4ade80"/></marker>
       </defs>
 
-      <!-- ROW 1: Scan Button -->
-      <rect x="115" y="10" width="150" height="42" rx="9" fill="#1a2235" stroke="#4dd9e0" stroke-width="1.5"/>
-      <text x="190" y="27" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#4dd9e0">&#x26A1; SCAN TRIGGERED</text>
-      <text x="190" y="42" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">Button click · popup</text>
+      <rect x="90" y="2" width="140" height="30" rx="7" fill="#1a2235" stroke="#4dd9e0" stroke-width="1.5"/>
+      <text x="160" y="13" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" fill="#4dd9e0">⚡ SCAN TRIGGERED</text>
+      <text x="160" y="25" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#6b7fa0">Button click · popup</text>
+      <line x1="160" y1="32" x2="160" y2="46" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
 
-      <line x1="190" y1="52" x2="190" y2="72" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
+      <rect x="90" y="48" width="140" height="30" rx="7" fill="#161e2e" stroke="#3a4a6a" stroke-width="1.5"/>
+      <text x="160" y="59" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" fill="#c9d1e8">⚙ SERVICE WORKER</text>
+      <text x="160" y="71" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#6b7fa0">Background orchestrator</text>
+      <line x1="160" y1="78" x2="160" y2="92" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
 
-      <!-- ROW 2: Service Worker -->
-      <rect x="115" y="75" width="150" height="42" rx="9" fill="#161e2e" stroke="#3a4a6a" stroke-width="1.5"/>
-      <text x="190" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#c9d1e8">&#x2699;&#xFE0F; SERVICE WORKER</text>
-      <text x="190" y="107" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">Background orchestrator</text>
+      <rect x="90" y="94" width="140" height="30" rx="7" fill="#1a1535" stroke="#a371f7" stroke-width="1.5"/>
+      <text x="160" y="105" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" fill="#a371f7">📦 GITHUB API</text>
+      <text x="160" y="117" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#6b7fa0">Fetch commits · diffs</text>
+      <line x1="160" y1="124" x2="160" y2="138" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
 
-      <line x1="190" y1="117" x2="190" y2="137" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
+      <rect x="90" y="140" width="140" height="30" rx="7" fill="#1a1535" stroke="#a371f7" stroke-width="1.5"/>
+      <text x="160" y="151" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" fill="#a371f7">🌍 RENDER BACKEND</text>
+      <text x="160" y="163" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#6b7fa0">Stream scan · SSE</text>
+      <line x1="160" y1="170" x2="160" y2="184" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
 
-      <!-- ROW 3: GitHub API -->
-      <rect x="115" y="140" width="150" height="42" rx="9" fill="#1a1535" stroke="#a371f7" stroke-width="1.5"/>
-      <text x="190" y="157" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#a371f7">&#x1F4E6; GITHUB API</text>
-      <text x="190" y="172" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">Fetch commits · diffs</text>
+      <rect x="90" y="186" width="140" height="30" rx="7" fill="#1f1a10" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="160" y="197" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" fill="#fbbf24">🔍 PATTERN MATCHER</text>
+      <text x="160" y="209" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#6b7fa0">API keys · tokens · secrets</text>
+      <line x1="160" y1="216" x2="160" y2="230" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
 
-      <line x1="190" y1="182" x2="190" y2="202" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
+      <rect x="90" y="232" width="140" height="30" rx="7" fill="#161e2e" stroke="#3a4a6a" stroke-width="1.5"/>
+      <text x="160" y="243" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" fill="#c9d1e8">📊 RISK SCORER</text>
+      <text x="160" y="255" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#6b7fa0">CRITICAL · HIGH · MEDIUM</text>
 
-      <!-- ROW 4: Render Backend -->
-      <rect x="115" y="205" width="150" height="42" rx="9" fill="#1a1535" stroke="#a371f7" stroke-width="1.5"/>
-      <text x="190" y="222" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#a371f7">&#x1F30D; RENDER BACKEND</text>
-      <text x="190" y="237" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">Stream scan · SSE</text>
+      <line x1="128" y1="262" x2="54" y2="290" stroke="#f87171" stroke-width="1.5" marker-end="url(#a2)"/>
+      <line x1="160" y1="262" x2="160" y2="290" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#a3)"/>
+      <line x1="192" y1="262" x2="266" y2="290" stroke="#4ade80" stroke-width="1.5" marker-end="url(#a4)"/>
 
-      <line x1="190" y1="247" x2="190" y2="267" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
+      <rect x="4" y="292" width="100" height="30" rx="7" fill="#1f1015" stroke="#f87171" stroke-width="1.5"/>
+      <text x="54" y="303" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" fill="#f87171">SECRETS FOUND</text>
+      <text x="54" y="315" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#6b7fa0">Alert + badge</text>
 
-      <!-- ROW 5: Pattern Matcher -->
-      <rect x="115" y="270" width="150" height="42" rx="9" fill="#1f1a10" stroke="#fbbf24" stroke-width="1.5"/>
-      <text x="190" y="287" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#fbbf24">&#x1F50D; PATTERN MATCHER</text>
-      <text x="190" y="302" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">API keys · tokens · secrets</text>
+      <rect x="110" y="292" width="100" height="30" rx="7" fill="#1f1a10" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="160" y="303" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" fill="#fbbf24">SAVE HISTORY</text>
+      <text x="160" y="315" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#6b7fa0">chrome.storage</text>
 
-      <line x1="190" y1="312" x2="190" y2="332" stroke="#3a4a6a" stroke-width="1.5" marker-end="url(#a1)"/>
-
-      <!-- ROW 6: Risk Scorer -->
-      <rect x="115" y="335" width="150" height="42" rx="9" fill="#161e2e" stroke="#3a4a6a" stroke-width="1.5"/>
-      <text x="190" y="352" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#c9d1e8">&#x1F4CA; RISK SCORER</text>
-      <text x="190" y="367" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">CRITICAL · HIGH · MEDIUM</text>
-
-      <!-- Branch arrows from Risk Scorer -->
-      <line x1="145" y1="377" x2="65" y2="408" stroke="#f87171" stroke-width="1.5" marker-end="url(#a2)"/>
-      <line x1="190" y1="377" x2="190" y2="408" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#a3)"/>
-      <line x1="235" y1="377" x2="315" y2="408" stroke="#4ade80" stroke-width="1.5" marker-end="url(#a4)"/>
-
-      <!-- ROW 7: Outcomes -->
-      <rect x="10" y="410" width="110" height="42" rx="9" fill="#1f1015" stroke="#f87171" stroke-width="1.5"/>
-      <text x="65" y="427" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="#f87171">SECRETS FOUND</text>
-      <text x="65" y="442" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">Alert + badge</text>
-
-      <rect x="135" y="410" width="110" height="42" rx="9" fill="#1f1a10" stroke="#fbbf24" stroke-width="1.5"/>
-      <text x="190" y="427" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="#fbbf24">SAVE HISTORY</text>
-      <text x="190" y="442" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">chrome.storage</text>
-
-      <rect x="260" y="410" width="110" height="42" rx="9" fill="#101f15" stroke="#4ade80" stroke-width="1.5"/>
-      <text x="315" y="427" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="#4ade80">CLEAN</text>
-      <text x="315" y="442" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#6b7fa0">No secrets found</text>
+      <rect x="216" y="292" width="100" height="30" rx="7" fill="#101f15" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="266" y="303" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" fill="#4ade80">CLEAN</text>
+      <text x="266" y="315" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#6b7fa0">No secrets found</text>
     </svg>
   </div>
 
