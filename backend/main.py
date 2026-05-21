@@ -169,16 +169,34 @@ async def scan_commit(repo, commit_sha, token, client):
         filename = f.get("filename", "")
         if should_skip_file(filename):
             continue
+
+        # Scan patch diffs (added lines)
         patch = f.get("patch", "")
-        if not patch:
-            continue
-        # Only scan added lines (starting with +)
-        added_lines = '\n'.join(
-            line[1:] for line in patch.split('\n')
-            if line.startswith('+') and not line.startswith('+++')
-        )
-        if added_lines:
-            findings.extend(scan_content(added_lines, filename, commit_sha, author, date, repo))
+        if patch:
+            added_lines = "\n".join(
+                line[1:] for line in patch.split("\n")
+                if line.startswith("+") and not line.startswith("+++")
+            )
+            if added_lines:
+                findings.extend(scan_content(added_lines, filename, commit_sha, author, date, repo))
+
+        # Also fetch and scan full file content for initial commits
+        raw_url = f.get("raw_url", "")
+        if raw_url and f.get("status") in ("added", "modified"):
+            try:
+                raw_r = await client.get(raw_url, headers=headers)
+                if raw_r.status_code == 200:
+                    full_content = raw_r.text
+                    full_findings = scan_content(full_content, filename, commit_sha, author, date, repo)
+                    # Deduplicate against patch findings
+                    existing = {(x["filename"], x["line_number"], x["type"]) for x in findings}
+                    for ff in full_findings:
+                        key = (ff["filename"], ff["line_number"], ff["type"])
+                        if key not in existing:
+                            findings.append(ff)
+                            existing.add(key)
+            except Exception:
+                pass
 
     return findings
 
