@@ -12,7 +12,7 @@
 
 ### For Judges & Reviewers ⚡
 
-📦 **[Download Extension Here](https://github.com/TalhaChougle/secret-scanner-extension/releases/latest/download/secret-scanner-extension.zip)**
+📦 **[Download the latest version here](https://github.com/TalhaChougle/secret-scanner-extension/archive/refs/heads/main.zip) or click the green **Code** button → **Download ZIP** **
 
 **Installation Steps:**
 
