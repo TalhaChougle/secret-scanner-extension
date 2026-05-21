@@ -21,13 +21,43 @@ function sleep(ms) {
 async function fetchCommits(repo, token, maxCommits) {
   try {
     const headers = token ? { 'Authorization': `token ${token}` } : {};
-    const res = await fetch(`https://api.github.com/repos/${repo}/commits?per_page=${maxCommits}`, { headers });
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data.map(c => ({
-      sha: c.sha.slice(0, 7),
-      message: c.commit.message.split('\n')[0].slice(0, 60),
-    }));
+
+    // Get default branch first
+    const repoRes = await fetch(`https://api.github.com/repos/${repo}`, { headers });
+    const repoData = await repoRes.json();
+    const defaultBranch = repoData.default_branch || 'main';
+
+    // Get exact commit count from default branch
+    const branchRes = await fetch(`https://api.github.com/repos/${repo}/branches/${defaultBranch}`, { headers });
+    const branchData = await branchRes.json();
+    const latestSha = branchData.commit?.sha;
+
+    const allCommits = [];
+    let page = 1;
+    const limit = Math.min(maxCommits, 10000);
+
+    while (allCommits.length < limit) {
+      const remaining = limit - allCommits.length;
+      const perPage = Math.min(100, remaining);
+      const res = await fetch(
+        `https://api.github.com/repos/${repo}/commits?per_page=${perPage}&page=${page}&sha=${latestSha}`,
+        { headers }
+      );
+      if (!res.ok) break;
+      const data = await res.json();
+      if (!data.length) break;
+
+      allCommits.push(...data.map(c => ({
+        sha: c.sha.slice(0, 7),
+        message: c.commit.message.split('\n')[0].slice(0, 60),
+      })));
+
+      if (data.length < perPage) break; // reached end of branch
+      page++;
+    }
+
+    console.log('[SecretScanner] fetchCommits returning:', allCommits.length, 'branch:', defaultBranch);
+    return allCommits;
   } catch(e) {
     return [];
   }
@@ -53,7 +83,10 @@ async function runScan(repo, tabId) {
     fetch(`${apiUrl}/health`, { signal: AbortSignal.timeout(35000) }).catch(() => null),
   ]);
 
-  await setLive({ percent: 8, message: `Found ${commits.length || maxCommits} commits — starting scan...` });
+  // Hard cap to exact fetched count — never exceed what GitHub returned
+  const actualTotal = commits.length;
+  console.log('[SecretScanner] Fetched commits:', actualTotal, 'maxCommits was:', maxCommits);
+  await setLive({ percent: 8, message: `Found ${actualTotal} commits — starting scan...` });
 
   // Step 2: Run the actual backend scan (fast, in background)
   const params = new URLSearchParams({ repo, max_commits: maxCommits, deep: true });
@@ -105,15 +138,15 @@ async function runScan(repo, tabId) {
   })();
 
   // Step 3: Animate through commits slowly so user sees each file
-  const total = commits.length || maxCommits;
-  const delayPerCommit = Math.max(400, Math.min(1200, 18000 / total)); // spread over ~18s
+  const total = commits.length; // exact count only — no fallback
+  const delayPerCommit = total > 0 ? Math.max(400, Math.min(1200, 18000 / total)) : 500;
 
   for (let i = 0; i < total; i++) {
     // Check if stopped
     const state = await chrome.storage.local.get('scanStopped');
     if (state.scanStopped) break;
 
-    const commit = commits[i] || { sha: `commit_${i}`, message: `Scanning commit ${i+1}...` };
+    const commit = commits[i]; // always exists since i < commits.length
     const pct = 10 + Math.round((i / total) * 82); // 10% → 92%
 
     // Show current findings from backend in real time
